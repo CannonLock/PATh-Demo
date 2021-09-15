@@ -14,7 +14,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Get branch name
-        run: BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+        run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)"
+
+      - name: Print Branch Name
+        run: echo ${{ env.BRANCH_NAME }}
 
       - uses: ruby/setup-ruby@v1
         with:
