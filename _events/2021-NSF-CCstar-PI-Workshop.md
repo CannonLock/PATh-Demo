@@ -5,10 +5,7 @@ layout: events
 published: true
 
 excerpt: |
-   The 2021 Campus Cyberinfrastructure (CC*) Workshop Events will be held September 14-15 and 21-22, 2021.
-    
-    - The 2021 Campus Cyberinfrastructure (CC*) Workshop builds upon the success of the previous CC* Workshops providing an opportunity for recipients of all active NSF CC* awards to engage with one another, exchange project findings, interact with national cyberinfrastructure experts and collaborate across project areas and project regions. Due to the ongoing pandemic, the 2021 PI workshop will be conducted virtually.  
-
+   Test
    
 start_date: 2021-09-14
 end_date: 2021-09-22

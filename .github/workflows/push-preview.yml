@@ -59,7 +59,7 @@ jobs:
 
           git remote add web-preview https://github.com/CannonLock/PATh-Demo.git
           git fetch --all
-          git checkout -b preview web-preview/preview
+          git checkout -b preview web-preview/main
           git merge $SPLIT_BRANCH -m "Merge Split Branch" --allow-unrelated-histories -X theirs
           git push
 
