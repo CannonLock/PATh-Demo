@@ -27,7 +27,7 @@ jobs:
       - name: Configure for Dev Preview
         run: |
           rm CNAME
-          sed -i "s|baseurl: ''|baseurl: '/web-preview/${BRANCH_NAME}'|" _config.yml
+          sed -i "s|baseurl: ''|baseurl: '/web-preview/${{ env.BRANCH_NAME }}'|" _config.yml
           git config user.name "Automatic preview publish"
           git config user.email "help@opensciencegrid.org"
           git commit -am "GHA: path-cc/path-cc.github.io #$GITHUB_RUN_NUMBER"
@@ -46,8 +46,8 @@ jobs:
           git checkout -b temp-branch
           bundle exec jekyll build
           mkdir temp-dir
-          mv _site $BRANCH_NAME
-          mv $BRANCH_NAME temp-dir
+          mv _site ${{ env.BRANCH_NAME }}
+          mv ${{ env.BRANCH_NAME }} temp-dir
 
           git add temp-dir
           git commit -m "Build Branch Website"
