@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: CannonLock/web-preview
-          token: ${{ secrets.PREVIEW_DEPLOY_KEY }} # `GitHub_PAT` is a secret that contains your PAT
+          token: ${{ secrets.DEPLOY_KEY }} # `GitHub_PAT` is a secret that contains your PAT
           path: test
 
       - name: Get branch name
