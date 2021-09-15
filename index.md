@@ -8,7 +8,7 @@ intro_image_absolute: true
 intro_image_hide_on_mobile: true
 ---
 
-PATh brings together the Center for High Throughput Computing and the
+P brings together the Center for High Throughput Computing and the
 OSG in order to advance the nation's campuses and science
 communities through the use of distributed High Throughput Computing.
 
