@@ -57,9 +57,5 @@ jobs:
           git fetch --all
           git checkout -b preview web-preview/main
           git merge $SPLIT_BRANCH -m "Merge Split Branch" --allow-unrelated-histories -X theirs
-          git push
+          git push web-preview HEAD:main
 
-          git checkout master
-          git remote rm web-preview
-          git branch -D temp-branch
-          git branch -D preview
