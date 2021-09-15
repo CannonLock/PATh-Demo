@@ -13,6 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Checkout private tools
+        uses: actions/checkout@v2
+        with:
+          repository: CannonLock/web-preview
+          token: ${{ secrets.PREVIEW_DEPLOY_KEY }} # `GitHub_PAT` is a secret that contains your PAT
+          path: test
+
       - name: Get branch name
         run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
@@ -41,6 +48,8 @@ jobs:
           ssh-agent -a "${{ env.SSH_AUTH_SOCK }}" > /dev/null
           ssh-add - <<< "${{ secrets.PREVIEW_DEPLOY_KEY }}"
 
+      - name: Build and Deploy
+        run: |
           git checkout -b temp-branch
           bundle exec jekyll build
           mkdir temp-dir
