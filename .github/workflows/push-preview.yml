@@ -13,13 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Checkout private tools
-        uses: actions/checkout@v2
-        with:
-          repository: CannonLock/web-preview
-          token: ${{ secrets.DEPLOY_KEY }} # `GitHub_PAT` is a secret that contains your PAT
-          path: test
-
       - name: Get branch name
         run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
