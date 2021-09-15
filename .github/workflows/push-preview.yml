@@ -57,7 +57,7 @@ jobs:
           git commit -m "Build Branch Website"
           SPLIT_BRANCH=$(git subtree split --prefix temp-dir temp-branch)
 
-          git remote add web-preview https://github.com/CannonLock/PATh-Demo.git
+          git remote add web-preview https://github.com/CannonLock/web-preview.git
           git fetch --all
           git checkout -b preview web-preview/preview
           git merge $SPLIT_BRANCH -m "Merge Split Branch" --allow-unrelated-histories -X theirs
