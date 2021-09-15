@@ -11,52 +11,52 @@ jobs:
   Build-And-Deploy-Preview:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Get branch name
+      - name: Get branch name
         run: BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.6
-        bundler-cache: true
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+          bundler-cache: true
 
-    - name: Configure for Dev Preview
-      run: |
-        rm CNAME
-        sed -i "s|baseurl: ''|baseurl: '/web-preview/${BRANCH_NAME}'|" _config.yml
-        git config user.name "Automatic preview publish"
-        git config user.email "help@opensciencegrid.org"
-        git commit -am "GHA: path-cc/path-cc.github.io #$GITHUB_RUN_NUMBER"
+      - name: Configure for Dev Preview
+        run: |
+          rm CNAME
+          sed -i "s|baseurl: ''|baseurl: '/web-preview/${BRANCH_NAME}'|" _config.yml
+          git config user.name "Automatic preview publish"
+          git config user.email "help@opensciencegrid.org"
+          git commit -am "GHA: path-cc/path-cc.github.io #$GITHUB_RUN_NUMBER"
 
-    - name: Setup SSH Keys and known_hosts
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-        ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
-        ssh-add - <<< "${{ secrets.PREVIEW_DEPLOY_KEY }}"
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
+          ssh-add - <<< "${{ secrets.PREVIEW_DEPLOY_KEY }}"
 
-    - name: Build and Deploy
-      run: |
-        git checkout -b temp-branch
-        bundle exec jekyll build
-        mkdir temp-dir
-        mv _site $BRANCH_NAME
-        mv $BRANCH_NAME temp-dir
+      - name: Build and Deploy
+        run: |
+          git checkout -b temp-branch
+          bundle exec jekyll build
+          mkdir temp-dir
+          mv _site $BRANCH_NAME
+          mv $BRANCH_NAME temp-dir
 
-        git add temp-dir
-        git commit -m "Build Branch Website"
-        SPLIT_BRANCH=$(git subtree split --prefix temp-dir temp-branch)
+          git add temp-dir
+          git commit -m "Build Branch Website"
+          SPLIT_BRANCH=$(git subtree split --prefix temp-dir temp-branch)
 
-        git remote add web-preview https://github.com/CannonLock/PATh-Demo.git
-        git fetch --all
-        git checkout -b preview web-preview/main
-        git merge $SPLIT_BRANCH -m "Merge Split Branch" --allow-unrelated-histories -X theirs
-        git push
+          git remote add web-preview https://github.com/CannonLock/PATh-Demo.git
+          git fetch --all
+          git checkout -b preview web-preview/main
+          git merge $SPLIT_BRANCH -m "Merge Split Branch" --allow-unrelated-histories -X theirs
+          git push
 
-        git checkout master
-        git remote rm web-preview
-        git branch -D temp-branch
-        git branch -D preview
+          git checkout master
+          git remote rm web-preview
+          git branch -D temp-branch
+          git branch -D preview
