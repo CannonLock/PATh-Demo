@@ -10,8 +10,6 @@ on:
 jobs:
   Build-And-Deploy-Preview:
     runs-on: ubuntu-18.04
-    env:
-
     steps:
       - uses: actions/checkout@v2
 
@@ -20,12 +18,18 @@ jobs:
           ruby-version: 2.6
           bundler-cache: true
 
+      - name: Initialize GH User
+        run: |
+          git config user.name "Automatic preview publish"
+          git config user.email "help@opensciencegrid.org"
+
       - name: Build and Deploy
         run: |
           # Build the production version of website
           JEKYLL_ENV=production bundle exec jekyll build
 
           # Commit the build then use 'git subtree' to create a branch with just the _site contents
-          git add _site
+          git add _site -f
           git commit -m "Build Branch Website"
           git push origin `git subtree split --prefix _site production`:gh-pages --force
+
