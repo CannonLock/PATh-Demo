@@ -1,0 +1,29 @@
+name: Deploy Web Previews
+on:
+  delete:
+    branches:
+      - preview-**
+
+jobs:
+  Delete Preview Page:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get branch name
+        run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      - name: Setup SSH Keys and known_hosts
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.WEB_PREVIEW_DEPLOY_KEY }}
+
+      - name: Build and Deploy
+        run: |
+          git remote add web-preview https://github.com/CannonLock/web-preview.git
+          git fetch --all
+          git checkout -b preview web-preview/main
+          git rm -rf ${{ env.BRANCH_NAME }}
+          git add .
+          git commit -m "Remove the Deleted Branch"
+          git push web-preview HEAD:main
