@@ -10,8 +10,6 @@ on:
 jobs:
   Build-And-Deploy-Preview:
     runs-on: ubuntu-18.04
-    env:
-
     steps:
       - uses: actions/checkout@v2
 
