@@ -8,13 +8,24 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  github-pages:
-    runs-on: ubuntu-latest
+  Build-And-Deploy-Preview:
+    runs-on: ubuntu-18.04
+    env:
+
     steps:
       - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
         with:
-          ref: production
-      - uses: helaili/jekyll-action@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          target_branch: 'gh-pages'
+          ruby-version: 2.6
+          bundler-cache: true
+
+      - name: Build and Deploy
+        run: |
+          # Build the production version of website
+          JEKYLL_ENV=production bundle exec jekyll build
+
+          # Commit the build then use 'git subtree' to create a branch with just the _site contents
+          git add _site
+          git commit -m "Build Branch Website"
+          git push origin `git subtree split --prefix _site production`:gh-pages --force
